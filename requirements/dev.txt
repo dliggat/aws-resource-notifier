@@ -1,0 +1,4 @@
+-r common.txt
+boto3==1.2.6
+pytest==2.9.1
+mock==2.0.0

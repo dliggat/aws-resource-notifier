@@ -1,0 +1,29 @@
+*EC2 Instances*
+{% if is_empty %}
+_Nothing to report._
+{% else %}
+The following instances have been running for a while:
+```
+{% if True %}  {% endif %}{% for title in titles.keys() -%}
+{{ (title|column_display_name).ljust(titles[title]) }}{%if not loop.last %} : {% endif %}
+{%- endfor %}
+
+{% if True %}  {% endif %}{% for title in titles.keys() -%}
+{%if not loop.last %}{{ '-' * titles[title] }} : {% else %}{{ '-' * title|length }}{% endif %}
+{%- endfor %}
+
+{% for region, items in result.iteritems() %}
+    {% if items.count > 0 %}
+        {% for i in items %}
+* {{ ' : '.join([i['id'].ljust(titles['id']),
+                 i['region'].ljust(titles['region']),
+                 i['launched'].ljust(titles['launched']),
+                 i['class'].ljust(titles['class']),
+                 i['owner'].ljust(titles['owner']),
+                 i['project'].ljust(titles['project']),
+                 i['other_tags']]) }}
+        {% endfor %}
+    {% endif %}
+{% endfor %}
+```
+{% endif %}

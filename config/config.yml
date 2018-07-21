@@ -1,0 +1,7 @@
+aws_entities:
+    - aws_acct: "111122223333"
+      description: "Development"
+      signin_url: https://company.signin.aws.amazon.com/console
+      slack_encrypted_url: "CiC7ZctFAIDYTH5zIGQq6vUX1deeS9mCH5Pj2z55I+Zy9hLQAQEBAgB4u2XLRQCA2Ex+cyBkKur1F9XXnkvZgh+T49s+eSPmcvYAAACnMIGkBgkqhkiG9w0BBwaggZYwgZMCAQAwgY0GCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMupY/L+59AeikLnygAgEQgGA95o4+mlpidHbOpvE1iRISEj49Z8tYytNNH5MLf/jkfhi3Wt7OAoHmh06EsPPPeA6g5UqMCqK6hCUB6eV24IRpQEGvBzrK/myM4dSwHBnkMYVCzRi9kM/8YK3carZRDpU="
+      slack_target_id: "#awsnag"
+

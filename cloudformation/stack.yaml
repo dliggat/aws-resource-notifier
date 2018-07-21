@@ -1,0 +1,90 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Stack for a Lambda function
+
+
+Parameters:
+  MemorySize:
+    Type: Number
+    Default: 256
+    Description: Memory size for Lambda function
+  LambdaTimeout:
+    Type: Number
+    Default: 180
+    Description: Timeout for Lambda function
+  FunctionName:
+    Type: String
+    Default: my-function-name
+    Description: Timeout for Lambda function
+
+Resources:
+  LambdaFunction:
+    Type: "AWS::Lambda::Function"
+    Metadata:
+      Comment: A Lambda function to monitor running resources in AWS
+    DependsOn:
+      - MyLambdaExecutionRole
+    Properties:
+      FunctionName: { Ref: FunctionName }
+      Code:
+        ZipFile:
+          "Fn::Join":
+            - "\n"
+            - - "def handler(event, context):"
+              - "    print('this is a no-op and will be overwritten')"
+      Role:
+        "Fn::GetAtt": [MyLambdaExecutionRole, Arn]
+
+      Timeout: { Ref: LambdaTimeout }
+      Handler: index.handler
+      Runtime: python2.7
+      MemorySize: { Ref: MemorySize }
+
+  MyLambdaExecutionRole:
+    Type: "AWS::IAM::Role"
+    Metadata:
+      Comment: The role under which the lambda function executes.
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"
+      Path: "/"
+      Policies:
+        - PolicyName: WriteLogsToCloudWatch
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "logs:*"
+                Resource: "arn:aws:logs:*:*:*"
+
+
+  # LambdaPermission:
+  #   Type: "AWS::Lambda::Permission"
+  #   Properties:
+  #     Action: lambda:InvokeFunction
+  #     SourceArn:
+  #       !GetAtt [ScheduledRule, Arn]
+  #     FunctionName:
+  #       !GetAtt [LambdaFunction, Arn]
+  #     Principal: events.amazonaws.com
+
+
+Outputs:
+  LambdaFunction:
+    Value: { Ref: LambdaFunction }
+  LambdaFunctionARN:
+    Description: ARN of the created Lambda function
+    Value:
+      "Fn::GetAtt": [LambdaFunction, Arn]
+  LambdaExecutionRole:
+    Description: Role under which the Lambda function executes
+    Value:  { Ref: MyLambdaExecutionRole }
